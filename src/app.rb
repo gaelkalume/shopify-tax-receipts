@@ -47,7 +47,7 @@ class SinatraApp < Sinatra::Base
   require_relative 'routes/gdpr'
 
   set :api_version, API_VERSION
-  set :scope, 'read_products, read_orders, read_all_orders'
+  set :scope, 'read_products, read_orders'#, read_all_orders'
 
   register Kaminari::Helpers::SinatraHelpers
 

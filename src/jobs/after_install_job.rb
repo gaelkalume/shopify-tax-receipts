@@ -21,7 +21,7 @@ class AfterInstallJob < Job
 
   def base_url
     if ENV['DEVELOPMENT']
-      'https://dev.kevinhughes.io'
+      'https://089f-24-201-89-48.ngrok.io'
     elsif ENV['STAGING']
       'https://taxreceipts-staging.herokuapp.com'
     else

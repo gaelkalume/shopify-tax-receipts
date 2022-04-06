@@ -20,7 +20,6 @@ class SinatraApp < Sinatra::Base
   put '/charity' do
     shopify_session do |shop_name|
       charity = Charity.find_by(shop: shop_name)
-
       if charity.update_attributes(charity_params(params))
         flash[:notice] = 'Saved'
       else
@@ -38,6 +37,7 @@ class SinatraApp < Sinatra::Base
       'donation_id_prefix',
       'receipt_threshold',
       'subtract_discounts',
+      'add_tip',
       'email_from',
       'email_bcc',
       'email_subject',

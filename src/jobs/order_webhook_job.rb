@@ -7,10 +7,13 @@ class OrderWebhookJob < Job
 
     status = order['financial_status']
 
+    print('\PERFORM EXECUTED\n')
+
     if status == 'paid' && existing_donation.nil?
       order_paid(shop_name, order)
-
+      
     elsif status == 'paid' && existing_donation
+      print('\nUPDATING ORDER\n')
       order_updated(shop_name, order, existing_donation)
 
     elsif status == 'refunded' && existing_donation && !existing_donation.void
@@ -45,6 +48,14 @@ class OrderWebhookJob < Job
     return if donations.empty?
 
     donation_amount = donations.sum
+    
+    if charity.add_tip
+      order["line_items"].each do |item|
+        if item["name"] == "Tip"
+          donation_amount += item["price"].to_f
+        end
+      end
+    end
 
     donation = Donation.new(
       shop: shop_name,
@@ -79,6 +90,14 @@ class OrderWebhookJob < Job
 
     donations = donations_from_order(order, charity, donation_products)
     donation_amount = donations.sum
+
+    if charity.add_tip
+      order["line_items"].each do |item|
+        if item["name"] == "Tip"
+          donation_amount += item["price"].to_f
+        end
+      end
+    end
 
     refunded_donations = donations_from_refund(order, charity, donation_products)
     refunded_amount = refunded_donations.sum
